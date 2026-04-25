@@ -28,3 +28,22 @@ app = create_fastapi_app(
     action_cls      = ARCAction,
     observation_cls = ARCObservation,
 )
+
+
+
+def main():
+    """Entry point — strictly callable with no arguments for openenv validate."""
+    import uvicorn
+    import argparse
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="0.0.0.0")
+    parser.add_argument("--port", type=int, default=7860)
+    
+    args, _ = parser.parse_known_args()
+    
+    uvicorn.run(app, host=args.host, port=args.port)
+
+
+if __name__ == "__main__":
+    main()
