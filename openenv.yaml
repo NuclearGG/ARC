@@ -1,0 +1,62 @@
+name: arc_india
+version: "1.0.0"
+description: >
+  ARC-India: Adaptive Multi-Agent System for Mixed Urban Mobility.
+  A multi-agent RL environment simulating chaotic Indian urban traffic —
+  vehicles, pedestrians, dynamic events, emergency response, and
+  behavior-aware compliance enforcement.
+
+tags:
+  - multi-agent
+  - traffic
+  - urban
+  - long-horizon
+  - world-modeling
+  - india
+
+themes:
+  - multi_agent_interactions
+  - long_horizon_planning
+  - world_modeling
+
+agents:
+  - perception
+  - local_control
+  - global_coordinator
+  - bacs
+  - emergency_decision
+
+actions:
+  - signal
+  - reroute
+  - emergency
+  - comply
+  - observe
+
+reward_components:
+  positive:
+    - throughput
+    - smooth_flow
+    - emergency_success
+    - pedestrian_safety
+  negative:
+    - collisions
+    - violations
+    - congestion
+    - pedestrian_incidents
+
+difficulty_levels:
+  - easy
+  - medium
+  - hard
+
+server:
+  port: 8000
+  framework: fastapi
+
+training:
+  supported_frameworks:
+    - trl_grpo
+    - unsloth
+    - skyrl
+  example_script: train_grpo.py
