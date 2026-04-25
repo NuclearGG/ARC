@@ -6,6 +6,6 @@
 
 """Arc environment server components."""
 
-from .ARC_environment import ArcEnvironment
+from .ARC_environment import ARCEnvironment
 
 __all__ = ["ArcEnvironment"]
