@@ -1,9 +1,9 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arc"
+name = "openenv-arc"
 version = "1.0.0"
 description = "ARC: Multi-Agent RL Environment for Mixed Urban Mobility"
 readme = "README.md"
@@ -13,6 +13,13 @@ dependencies = [
     "fastapi>=0.110.0",
     "uvicorn>=0.29.0",
     "pydantic>=2.0.0",
+    "gymnasium",
+    "numpy",
+    "trl>=0.8.0",
+    "transformers>=4.40.0",
+    "unsloth",
+    "torch>=2.2.0",
+    "wandb",
 ]
 
 [project.optional-dependencies]
@@ -29,4 +36,9 @@ dev = [
 ]
 
 [project.scripts]
-arc-train = "arc_india.train_grpo:main"
+arc-train = "arc.train:main"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["ARC", "ARC.server"]
+package-dir = { "ARC" = ".", "ARC.server" = "server" }
