@@ -6,7 +6,7 @@
 
 # Multi-stage build using openenv-base
 # This Dockerfile is flexible and works for both:
-# - In-repo environments (with local OpenEnv sources)
+# - In-repo enviroAnments (with local OpenEnv sources)
 # - Standalone environments (with openenv from PyPI/Git)
 # The build script (openenv build) handles context detection and sets appropriate build args.
 

@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "arc"
@@ -28,9 +28,5 @@ dev = [
     "httpx",
 ]
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["arc_india*"]
-
 [project.scripts]
-arc-india-train = "arc_india.train_grpo:main"
+arc-train = "arc_india.train_grpo:main"
