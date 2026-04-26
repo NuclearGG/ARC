@@ -77,6 +77,15 @@ def gym_like_state() -> ARCState:
     """Gym-like POST state endpoint for simple clients."""
     return _gym_env.state
 
+@app.get("/web")
+def web(logs: str = None):
+    return {
+        "status": "ok",
+        "service": "ARC-India",
+        "logs": logs,
+        "healthy": True
+    }
+
 
 def main():
     """Entry point - strictly callable with no arguments for openenv validate."""
