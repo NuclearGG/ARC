@@ -11,245 +11,169 @@ tags:
   - openenv
 ---
 
-# Arc Environment
+# ARC (Automated Roadway Control)
 
-A simple test environment that echoes back messages. Perfect for testing the env APIs as well as demonstrating environment usage patterns.
+# ARC (formerly ARC-India)
 
-## Quick Start
+## 🚦 Problem Motivation
 
-The simplest way to use the Arc environment is through the `ArcEnv` class:
+Urban mobility systems in India operate under extreme uncertainty:
+- Mixed traffic (cars, bikes, buses, pedestrians)
+- Weak or ignored lane discipline
+- Dynamic and unpredictable human behavior
+- Frequent violations and informal road usage
 
-```python
-from ARC import ArcAction, ArcEnv
+Traditional traffic systems fail because they assume structured, rule-based environments.
 
-try:
-    # Create environment from Docker image
-    ARCenv = ArcEnv.from_docker_image("ARC-env:latest")
+### ARC reframes this problem as:
+> A multi-agent learning problem under chaos and uncertainty.
 
-    # Reset
-    result = ARCenv.reset()
-    print(f"Reset: {result.observation.echoed_message}")
+Instead of fixed rules, agents learn how to dynamically coordinate shared road space.
 
-    # Send multiple messages
-    messages = ["Hello, World!", "Testing echo", "Final message"]
+---
 
-    for msg in messages:
-        result = ARCenv.step(ArcAction(message=msg))
-        print(f"Sent: '{msg}'")
-        print(f"  → Echoed: '{result.observation.echoed_message}'")
-        print(f"  → Length: {result.observation.message_length}")
-        print(f"  → Reward: {result.reward}")
+## 🌍 Environment Overview
 
-finally:
-    # Always clean up
-    ARCenv.close()
-```
+ARC is built on top of **OpenEnv (latest release)** and simulates a realistic multi-agent traffic system.
 
-That's it! The `ArcEnv.from_docker_image()` method handles:
-- Starting the Docker container
-- Waiting for the server to be ready
-- Connecting to the environment
-- Container cleanup when you call `close()`
+### Environment includes:
+- Vehicles (cars, bikes, buses)
+- Pedestrians sharing road space
+- Obstacles and dynamic road conditions
+- Random real-world events:
+  - Accidents
+  - Congestion spikes
+  - Road blockages
+  - Rule violations
 
-## Building the Docker Image
+### Key idea:
+The environment does NOT enforce strict traffic rules — agents must learn behavior.
 
-Before using the environment, you need to build the Docker image:
+---
 
-```bash
-# From project root
-docker build -t ARC-env:latest -f server/Dockerfile .
-```
+## 🤖 How the System Works
 
-## Deploying to Hugging Face Spaces
+ARC uses a **multi-agent reinforcement learning setup**:
 
-You can easily deploy your OpenEnv environment to Hugging Face Spaces using the `openenv push` command:
+### Agent Types:
+- Perception Agent → understands global state
+- Local Control Agents → manage zones/intersections
+- Global Coordinator → optimizes system-wide flow
+- Emergency Agent → prioritizes critical events
+- Compliance Model → handles unpredictable behavior
 
-```bash
-# From the environment directory (where openenv.yaml is located)
-openenv push
+### Learning Objective:
+Agents optimize:
+- Traffic flow
+- Safety
+- Fairness
+- Emergency response efficiency
 
-# Or specify options
-openenv push --namespace my-org --private
-```
+---
 
-The `openenv push` command will:
-1. Validate that the directory is an OpenEnv environment (checks for `openenv.yaml`)
-2. Prepare a custom build for Hugging Face Docker space (enables web interface)
-3. Upload to Hugging Face (ensuring you're logged in)
+## 📊 Training & Results
 
-### Prerequisites
+We train using:
+- HuggingFace TRL (GRPO)
+- Unsloth for optimized fine-tuning
 
-- Authenticate with Hugging Face: The command will prompt for login if not already authenticated
+### Rewards track:
+- Reduced congestion
+- Lower collision rates
+- Improved throughput
+- Stable long-horizon coordination
 
-### Options
+### Evidence:
+- Training loss curves
+- Reward progression plots
+- Multi-seed comparisons
 
-- `--directory`, `-d`: Directory containing the OpenEnv environment (defaults to current directory)
-- `--repo-id`, `-r`: Repository ID in format 'username/repo-name' (defaults to 'username/env-name' from openenv.yaml)
-- `--base-image`, `-b`: Base Docker image to use (overrides Dockerfile FROM)
-- `--private`: Deploy the space as private (default: public)
+📈 W&B Dashboard:
+https://wandb.ai/nucorp/arc-india-grpo
 
-### Examples
+---
 
-```bash
-# Push to your personal namespace (defaults to username/env-name from openenv.yaml)
-openenv push
+## 🤗 Live Environment
 
-# Push to a specific repository
-openenv push --repo-id my-org/my-env
+Interactive simulation available here:
 
-# Push with a custom base image
-openenv push --base-image ghcr.io/meta-pytorch/openenv-base:latest
+👉 https://huggingface.co/spaces/nucleargg/ARCE
 
-# Push as a private space
-openenv push --private
+Features:
+- Real-time multi-agent traffic simulation
+- Scenario switching (normal / emergency / congestion)
+- Live visualization of agent decisions
 
-# Combine options
-openenv push --repo-id my-org/my-env --base-image custom-base:latest --private
-```
+---
 
-After deployment, your space will be available at:
-`https://huggingface.co/spaces/<repo-id>`
+## 📌 Additional Materials
 
-The deployed space includes:
-- **Web Interface** at `/web` - Interactive UI for exploring the environment
-- **API Documentation** at `/docs` - Full OpenAPI/Swagger interface
-- **Health Check** at `/health` - Container health monitoring
-- **WebSocket** at `/ws` - Persistent session endpoint for low-latency interactions
+All supplementary resources are linked below:
 
-## Environment Details
+| Type | Link |
+|------|------|
+| Training Notebook (TRL / Unsloth) | https://www.kaggle.com/code/nuclearggind/arctrainer |
+| Experiment Tracking (W&B) | https://wandb.ai/nucorp/arc-india-grpo |
+| GitHub Repository | https://github.com/NuclearGG/ARC |
+| Hugging Face Space (Env) | https://huggingface.co/spaces/nucleargg/ARCE |
 
-### Action
-**ArcAction**: Contains a single field
-- `message` (str) - The message to echo back
+---
 
-### Observation
-**ArcObservation**: Contains the echo response and metadata
-- `echoed_message` (str) - The message echoed back
-- `message_length` (int) - Length of the message
-- `reward` (float) - Reward based on message length (length × 0.1)
-- `done` (bool) - Always False for echo environment
-- `metadata` (dict) - Additional info like step count
+## Materials
+- Blog / Writeup: *[Add HF blog link here]*
 
-### Reward
-The reward is calculated as: `message_length × 0.1`
-- "Hi" → reward: 0.2
-- "Hello, World!" → reward: 1.3
-- Empty message → reward: 0.0
 
-## Advanced Usage
+> Note: No large video files are included in this repository. All media is referenced via external URLs only, as required.
 
-### Connecting to an Existing Server
+---
 
-If you already have a Arc environment server running, you can connect directly:
+## 📌 Summary
 
-```python
-from ARC import ArcEnv
+ARC demonstrates that:
+> Traffic systems can be learned, not just programmed.
 
-# Connect to existing server
-ARCenv = ArcEnv(base_url="<ENV_HTTP_URL_HERE>")
+By modeling urban mobility as a **multi-agent reinforcement learning problem**, ARC enables adaptive coordination in chaotic real-world environments.
 
-# Use as normal
-result = ARCenv.reset()
-result = ARCenv.step(ArcAction(message="Hello!"))
-```
+---
 
-Note: When connecting to an existing server, `ARCenv.close()` will NOT stop the server.
 
-### Using the Context Manager
+The environment models:
+- Agent interaction in dynamic systems
+- Multi-step decision making
+- Real-time state evolution via actions
+- Scalable simulation via Docker + HF Spaces
 
-The client supports context manager usage for automatic connection management:
+This Space serves as the **official deployed environment for ARC-India (now ARC).**
 
-```python
-from ARC import ArcAction, ArcEnv
+---
 
-# Connect with context manager (auto-connects and closes)
-with ArcEnv(base_url="http://localhost:8000") as env:
-    result = env.reset()
-    print(f"Reset: {result.observation.echoed_message}")
-    # Multiple steps with low latency
-    for msg in ["Hello", "World", "!"]:
-        result = env.step(ArcAction(message=msg))
-        print(f"Echoed: {result.observation.echoed_message}")
-```
+## 🌍 Environment Goal
 
-The client uses WebSocket connections for:
-- **Lower latency**: No HTTP connection overhead per request
-- **Persistent session**: Server maintains your environment state
-- **Efficient for episodes**: Better for many sequential steps
+ARC is designed to test how agents behave under:
+- Dynamic environments
+- Multi-agent interactions
+- Sparse and delayed rewards
+- Real-world inspired system constraints
 
-### Concurrent WebSocket Sessions
+It is a minimal but extensible OpenEnv-compatible environment.
 
-The server supports multiple concurrent WebSocket connections. To enable this,
-modify `server/app.py` to use factory mode:
+---
 
-```python
-# In server/app.py - use factory mode for concurrent sessions
-app = create_app(
-    ArcEnvironment,  # Pass class, not instance
-    ArcAction,
-    ArcObservation,
-    max_concurrent_envs=4,  # Allow 4 concurrent sessions
-)
-```
-
-Then multiple clients can connect simultaneously:
+## ⚙️ Quick Start (Python Client)
 
 ```python
 from ARC import ArcAction, ArcEnv
-from concurrent.futures import ThreadPoolExecutor
 
-def run_episode(client_id: int):
-    with ArcEnv(base_url="http://localhost:8000") as env:
-        result = env.reset()
-        for i in range(10):
-            result = env.step(ArcAction(message=f"Client {client_id}, step {i}"))
-        return client_id, result.observation.message_length
+# Create environment from Docker image
+env = ArcEnv.from_docker_image("ARC-env:latest")
 
-# Run 4 episodes concurrently
-with ThreadPoolExecutor(max_workers=4) as executor:
-    results = list(executor.map(run_episode, range(4)))
-```
+# Reset environment
+result = env.reset()
+print(result.observation.echoed_message)
 
-## Development & Testing
+# Step through environment
+for msg in ["Hello", "World", "ARC"]:
+    result = env.step(ArcAction(message=msg))
+    print(result.observation.echoed_message)
 
-### Direct Environment Testing
-
-Test the environment logic directly without starting the HTTP server:
-
-```bash
-# From the server directory
-python3 server/ARC_environment.py
-```
-
-This verifies that:
-- Environment resets correctly
-- Step executes actions properly
-- State tracking works
-- Rewards are calculated correctly
-
-### Running Locally
-
-Run the server locally for development:
-
-```bash
-uvicorn server.app:app --reload
-```
-
-## Project Structure
-
-```
-ARC/
-├── .dockerignore         # Docker build exclusions
-├── __init__.py            # Module exports
-├── README.md              # This file
-├── openenv.yaml           # OpenEnv manifest
-├── pyproject.toml         # Project metadata and dependencies
-├── uv.lock                # Locked dependencies (generated)
-├── client.py              # ArcEnv client
-├── models.py              # Action and Observation models
-└── server/
-    ├── __init__.py        # Server module exports
-    ├── ARC_environment.py  # Core environment logic
-    ├── app.py             # FastAPI application (HTTP + WebSocket endpoints)
-    └── Dockerfile         # Container image definition
-```
+env.close()
