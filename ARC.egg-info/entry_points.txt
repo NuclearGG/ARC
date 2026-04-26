@@ -1,0 +1,3 @@
+[console_scripts]
+arc-server = ARC.server.app:main
+server = ARC.server.app:main

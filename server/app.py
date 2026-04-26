@@ -45,15 +45,9 @@ _gym_env = ARCEnvironment()
 # =====================================================================
 @app.get("/")
 def hf_space_health_check():
-    """
-    Hugging Face Spaces continuously pings GET / to check if the 
-    container is alive. Without this, it gets a 404 and times out.
-    """
-    return {
-        "status": "healthy", 
-        "env": "ARCE-India", 
-        "message": "Environment is ready for RL training!"
-    }
+    async def read_index():
+        with open(os.path.join(BASE_DIR, "web", "index.html"), "r") as f:
+         return f.read()
 
 
 @app.post("/RESET", response_model=ARCObservation)

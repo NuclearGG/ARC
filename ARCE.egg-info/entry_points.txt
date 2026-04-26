@@ -1,0 +1,3 @@
+[console_scripts]
+arce-server = ARCE.server.app:main
+server = ARCE.server.app:main
