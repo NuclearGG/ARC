@@ -8,4 +8,4 @@
 
 from .ARC_environment import ARCEnvironment
 
-__all__ = ["ArcEnvironment"]
+__all__ = ["ARCEnvironment"]
