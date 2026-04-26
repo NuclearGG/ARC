@@ -17,7 +17,7 @@ FIXES APPLIED:
           of importing ZONE_IDS from simulation. If the zone layout ever changes
           the agent silently operates on a stale list — and LocalControlAgent
           instances for missing zones would never be created.
-          Fixed: import ZONE_IDS from ARC.simulation.
+          Fixed: import ZONE_IDS from ARCE.simulation.
 """
 
 import os
@@ -34,7 +34,7 @@ _ROOT = os.path.dirname(_HERE)
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
-from ARC.simulation import ZONE_IDS   # single source of truth
+from ARCE.simulation import ZONE_IDS   # single source of truth
 
 
 # ---------------------------------------------------------------------------

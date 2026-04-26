@@ -1,7 +1,7 @@
-name: arc
+name: arce
 version: "1.0.0"
 description: >
-  ARC-India: Adaptive Multi-Agent System for Mixed Urban Mobility.
+  ARCE-India: Adaptive Multi-Agent System for Mixed Urban Mobility.
   A multi-agent RL environment simulating chaotic Indian urban traffic —
   vehicles, pedestrians, dynamic events, emergency response, and
   behavior-aware compliance enforcement.

@@ -1,11 +1,11 @@
 """
-ARC/client.py
+ARCE/client.py
 OpenEnv SyncEnvClient for ARC-India.
 Used by RL training scripts and tests to interact with the running server.
 
 Usage:
-  from ARC.client import ARCClient
-  from ARC.models import ARCAction
+  from ARCE.client import ARCClient
+  from ARCE.models import ARCAction
 
   with ARCClient(base_url="http://localhost:8000") as client:
       obs  = client.reset()

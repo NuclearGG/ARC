@@ -3,7 +3,7 @@ ARC-India: GRPO Inference Script
 Loads trained LoRA weights and runs the agent using HF TRL for tool-calling inference.
 
 FIXES APPLIED:
-  BUG-1  sys.path pointed at ARC/ dir itself, so 'from ARC.x' looked for ARC/ARC/x.
+  BUG-1  sys.path pointed at ARCE/ dir itself, so 'from ARCE.x' looked for ARCE/ARCE/x.
          Fixed: go up one more level to the project root.
   BUG-2  Optional missing from typing import → NameError on reset() signature.
   BUG-3  TRLAutoModelForCausalLM does not exist in trl → ImportError.
@@ -24,9 +24,9 @@ import sys
 import argparse
 from typing import Dict, List, Optional       # BUG-2 FIX: added Optional
 
-# BUG-1 FIX: __file__ is ARC/inference.py; dirname(__file__) = ARC/
-#            We need the project root (parent of ARC/) on sys.path so that
-#            'from ARC.simulation import ...' resolves to ARC/simulation.py
+# BUG-1 FIX: __file__ is ARCE/inference.py; dirname(__file__) = ARCE/
+#            We need the project root (parent of ARCE/) on sys.path so that
+#            'from ARCE.simulation import ...' resolves to ARCE/simulation.py
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
@@ -36,8 +36,8 @@ except ImportError:
     print("Error: Please install unsloth and torch:  pip install unsloth torch")
     sys.exit(1)
 
-from ARC.simulation import ARCIndiaSimulation, ZONE_IDS, SIGNAL_PHASES
-from ARC.agents import AgentOrchestrator
+from ARCE.simulation import ARCIndiaSimulation, ZONE_IDS, SIGNAL_PHASES
+from ARCE.agents import AgentOrchestrator
 
 
 # ─────────────────────────────────────────────────────────────────────────────

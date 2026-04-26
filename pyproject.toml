@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ARC"
+name = "ARCE"
 version = "1.0.0"
-description = "ARC-India: Multi-Agent RL Environment for Mixed Urban Mobility"
+description = "ARCE-India: Multi-Agent RL Environment for Mixed Urban Mobility"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -20,10 +20,10 @@ dependencies = [
 
 # ── Entry point required by openenv validate ──────────────────────────────────
 # openenv validate checks for [project.scripts] pointing to a no-arg main().
-# Key convention: <project-name>-server → "arc-server"
+# Keep backward-compatible script aliases while adding ARCE naming.
 [project.scripts]
-server = "ARC.server.app:main"
-arc-server = "ARC.server.app:main"
+server = "ARCE.server.app:main"
+arce-server = "ARCE.server.app:main"
 
 [project.optional-dependencies]
 train = [
@@ -39,8 +39,8 @@ dev = ["pytest", "httpx"]
 # ── Package discovery ─────────────────────────────────────────────────────────
 # Explicit package list avoids case-sensitivity issues with setuptools find.
 [tool.setuptools]
-packages = ["ARC", "ARC.server"]
+packages = ["ARCE", "ARCE.server"]
 
 [tool.setuptools.package-dir]
-ARC = "."
-"ARC.server" = "server"
+ARCE = "."
+"ARCE.server" = "server"

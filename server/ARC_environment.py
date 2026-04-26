@@ -1,5 +1,5 @@
 """
-ARC/server/ARC_environment.py
+ARCE/server/ARC_environment.py
 OpenEnv Environment subclass — wraps ARCIndiaSimulation (gymnasium.Env).
 
 OpenEnv routes:
@@ -14,8 +14,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from typing import Optional
 from openenv.core.env_server import Environment
 
-from models import ARCAction, ARCObservation, ARCState
-from simulation import ARCIndiaSimulation
+from ARCE.models import ARCAction, ARCObservation, ARCState
+from ARCE.simulation import ARCIndiaSimulation
 
 
 class ARCEnvironment(Environment):
