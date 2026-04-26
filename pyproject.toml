@@ -1,44 +1,44 @@
 [build-system]
-requires = ["setuptools>=45", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "openenv-arc"
+name = "ARC"
 version = "1.0.0"
-description = "ARC: Multi-Agent RL Environment for Mixed Urban Mobility"
+description = "ARC-India: Multi-Agent RL Environment for Mixed Urban Mobility"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "openenv-core>=0.1.1",
+    "openenv>=0.1.0",
     "fastapi>=0.110.0",
-    "uvicorn>=0.29.0",
+    "uvicorn[standard]>=0.29.0",
     "pydantic>=2.0.0",
-    "gymnasium",
-    "numpy",
-    "trl>=0.8.0",
-    "transformers>=4.40.0",
-    "unsloth",
-    "torch>=2.2.0",
-    "wandb",
+    "gymnasium>=1.0.0",
+    "numpy>=1.24.0",
 ]
+
+# ── Entry point required by openenv validate ──────────────────────────────────
+# openenv validate checks for [project.scripts] pointing to a no-arg main().
+# Key convention: <project-name>-server → "arc-server"
+[project.scripts]
+arc-server = "ARC.server.app:main"
 
 [project.optional-dependencies]
 train = [
     "trl>=0.8.0",
     "transformers>=4.40.0",
-    "unsloth",
     "torch>=2.2.0",
+    "unsloth",
     "wandb",
+    "datasets",
 ]
-dev = [
-    "pytest",
-    "httpx",
-]
+dev = ["pytest", "httpx"]
 
-[project.scripts]
-arc-train = "arc.train:main"
-
+# ── Package discovery ─────────────────────────────────────────────────────────
+# Explicit package list avoids case-sensitivity issues with setuptools find.
 [tool.setuptools]
-include-package-data = true
 packages = ["ARC", "ARC.server"]
-package-dir = { "ARC" = ".", "ARC.server" = "server" }
+
+[tool.setuptools.package-dir]
+ARC = "."
+"ARC.server" = "server"
