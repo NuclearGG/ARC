@@ -21,6 +21,7 @@ dependencies = [
 # openenv validate checks for [project.scripts] pointing to a no-arg main().
 # Key convention: <project-name>-server → "arc-server"
 [project.scripts]
+server = "ARC.server.app:main"
 arc-server = "ARC.server.app:main"
 
 [project.optional-dependencies]
